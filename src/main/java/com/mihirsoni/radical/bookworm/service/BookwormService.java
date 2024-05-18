@@ -25,6 +25,11 @@ public class BookwormService {
   private final BookwormConfiguration configuration;
   private final ObjectMapper objectMapper;
 
+  /**
+   * Fetches all bestsellers across all categories from New York Times API (full-overview)
+   *
+   * @return List of bestseller books
+   */
   public List<Book> fetchAllBestsellersAcrossCategoriesFromNYT() {
     String uri = buildUri(Constants.GET_FULL_OVERVIEW);
     String jsonResponse = restTemplate.getForObject(uri, String.class);
@@ -57,6 +62,14 @@ public class BookwormService {
     return books;
   }
 
+  /**
+   * Builds book object from json node
+   *
+   * @param bookNode json node of book
+   * @param listNode json node of list
+   * @param isbn ISBN of book
+   * @return Book object
+   */
   private Book buildBookObjectFromJsonNode(JsonNode bookNode, JsonNode listNode, String isbn) {
     return Book.builder()
         .title(bookNode.path("title").asText())
@@ -70,12 +83,24 @@ public class BookwormService {
         .build();
   }
 
+  /**
+   * Builds URI for external API call with query params
+   *
+   * @param url URL of external API
+   * @return Built URI in String format
+   */
   private String buildUri(String url) {
     return UriComponentsBuilder.fromUriString(url)
         .queryParam("api-key", configuration.getApiKey())
         .toUriString();
   }
 
+  /**
+   * Adds a book to favourite list if it does not already exist. If it does, just marks it as
+   * favourite
+   *
+   * @param book Book object to be marked as favourite
+   */
   public void addToFavourite(Book book) {
     repository
         .findById(book.getIsbn())
@@ -93,6 +118,11 @@ public class BookwormService {
             });
   }
 
+  /**
+   * Removes a book from favourite list if it already exists
+   *
+   * @param book Book object to be removed from favourite list
+   */
   public void removeFromFavourite(Book book) {
     repository
         .findById(book.getIsbn())
@@ -108,6 +138,11 @@ public class BookwormService {
                     book.getIsbn()));
   }
 
+  /**
+   * Updates rating and/or price of a book if it already exists
+   *
+   * @param book Book object with the new values
+   */
   public void updateRatingAndPrice(Book book) {
     repository
         .findById(book.getIsbn())
