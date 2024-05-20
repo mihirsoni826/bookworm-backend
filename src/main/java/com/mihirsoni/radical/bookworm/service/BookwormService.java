@@ -28,7 +28,7 @@ public class BookwormService {
   /**
    * Fetches all bestsellers across all categories from New York Times API (full-overview)
    *
-   * @return List of bestseller books
+   * @return Set of bestseller books
    */
   public Set<Book> fetchAllBestsellersAcrossCategoriesFromNYTAPI() {
     String uri = buildUri(Constants.GET_FULL_OVERVIEW);
@@ -83,7 +83,8 @@ public class BookwormService {
   }
 
   /**
-   * Builds book object from json node
+   * Builds book object from json node and list node Generates random price and rating, 5-15 and 1-5
+   * respectively
    *
    * @param bookNode json node of book
    * @param listNode json node of list

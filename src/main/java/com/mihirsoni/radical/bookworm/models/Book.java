@@ -25,6 +25,12 @@ public class Book {
   private String listName;
   private String encodedListName;
 
+  /**
+   * checks if two objects are equal based on their ISBN
+   *
+   * @param o object to be compared
+   * @return true if objects are equal else false
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -33,6 +39,11 @@ public class Book {
     return isbn != null ? isbn.equals(book.isbn) : book.isbn == null;
   }
 
+  /**
+   * calculates hashcode based on ISBN
+   *
+   * @return hashcode
+   */
   @Override
   public int hashCode() {
     return isbn != null ? isbn.hashCode() : 0;
