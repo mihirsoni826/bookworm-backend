@@ -21,7 +21,20 @@ public class Book {
   private int rating;
   private String imageUrl;
   private boolean isFavourite;
-  private double price;
+  private int price;
   private String listName;
   private String encodedListName;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Book book = (Book) o;
+    return isbn != null ? isbn.equals(book.isbn) : book.isbn == null;
+  }
+
+  @Override
+  public int hashCode() {
+    return isbn != null ? isbn.hashCode() : 0;
+  }
 }

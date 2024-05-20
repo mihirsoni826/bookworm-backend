@@ -7,9 +7,9 @@ import com.mihirsoni.radical.bookworm.models.Book;
 import com.mihirsoni.radical.bookworm.repository.BookwormRepository;
 import com.mihirsoni.radical.bookworm.utils.Constants;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,19 @@ public class BookwormService {
    *
    * @return List of bestseller books
    */
-  public List<Book> fetchAllBestsellersAcrossCategoriesFromNYT() {
+  public Set<Book> fetchAllBestsellersAcrossCategoriesFromNYTAPI() {
     String uri = buildUri(Constants.GET_FULL_OVERVIEW);
     String jsonResponse = restTemplate.getForObject(uri, String.class);
 
-    List<Book> books = new ArrayList<>();
+    //    Added this for development purposes so as not to hit API limits
+    //    String jsonResponse = null;
+    //    try {
+    //      jsonResponse = readJsonFromFile("src/main/resources/response.json");
+    //    } catch (IOException e) {
+    //      throw new RuntimeException(e);
+    //    }
+
+    Set<Book> books = new HashSet<>();
     try {
       JsonNode rootNode = objectMapper.readTree(jsonResponse);
       JsonNode listsNode = rootNode.path("results").path("lists");
@@ -63,6 +71,18 @@ public class BookwormService {
   }
 
   /**
+   * Reads json file from given path Added this functionality for development purposes so as not to
+   * hit API limits
+   *
+   * @param filePath path of json file
+   * @return json string
+   * @throws IOException if file not found
+   */
+  private String readJsonFromFile(String filePath) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(filePath)));
+  }
+
+  /**
    * Builds book object from json node
    *
    * @param bookNode json node of book
@@ -76,9 +96,13 @@ public class BookwormService {
         .author(bookNode.path("author").asText())
         .imageUrl(bookNode.path("book_image").asText())
         .isFavourite(false)
-        .price(bookNode.path("price").asDouble())
+        .price(
+            bookNode.path("price").asText().equals("0.00")
+                ? generateRandomNumber()
+                : Integer.parseInt(bookNode.path("price").asText()))
         .listName(listNode.path("list_name").asText())
         .encodedListName(listNode.path("list_name_encoded").asText())
+        .rating(generateRandomRating())
         .isbn(isbn)
         .build();
   }
@@ -113,6 +137,7 @@ public class BookwormService {
                   book.getIsbn());
             },
             () -> {
+              book.setFavourite(true); // ensure that book is marked as favourite
               repository.save(book);
               log.info("Book with ISBN {} added to favourite list", book.getIsbn());
             });
@@ -158,5 +183,40 @@ public class BookwormService {
         book.getIsbn(),
         book.getRating(),
         book.getPrice());
+  }
+
+  /**
+   * Fetches all books from favourite list
+   *
+   * @return List of favourite books
+   */
+  public List<Book> getFavouriteList() {
+    List<Book> list = repository.findByFavourite();
+    log.info("{} favourite bestsellers fetched", list.size());
+    return list;
+  }
+
+  /** Purges database and resets application */
+  public void purgeDatabase() {
+    repository.deleteAll();
+    log.info("Database purged");
+  }
+
+  /**
+   * Generates random rating between 1 and 5
+   *
+   * @return Random rating
+   */
+  private int generateRandomRating() {
+    return (int) (Math.random() * 5) + 1;
+  }
+
+  /**
+   * Generates random number between 5 and 20
+   *
+   * @return Random number
+   */
+  private int generateRandomNumber() {
+    return (int) (Math.random() * 15) + 5;
   }
 }
