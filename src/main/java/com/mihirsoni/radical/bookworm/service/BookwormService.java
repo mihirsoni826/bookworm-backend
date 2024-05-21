@@ -7,9 +7,10 @@ import com.mihirsoni.radical.bookworm.models.Book;
 import com.mihirsoni.radical.bookworm.repository.BookwormRepository;
 import com.mihirsoni.radical.bookworm.utils.Constants;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,16 +32,8 @@ public class BookwormService {
    * @return Set of bestseller books
    */
   public Set<Book> fetchAllBestsellersAcrossCategoriesFromNYTAPI() {
-    String uri = buildUri(Constants.GET_FULL_OVERVIEW);
+    String uri = buildUri();
     String jsonResponse = restTemplate.getForObject(uri, String.class);
-
-    //    Added this for development purposes so as not to hit API limits
-    //    String jsonResponse = null;
-    //    try {
-    //      jsonResponse = readJsonFromFile("src/main/resources/response.json");
-    //    } catch (IOException e) {
-    //      throw new RuntimeException(e);
-    //    }
 
     Set<Book> books = new HashSet<>();
     try {
@@ -71,18 +64,6 @@ public class BookwormService {
   }
 
   /**
-   * Reads json file from given path Added this functionality for development purposes so as not to
-   * hit API limits
-   *
-   * @param filePath path of json file
-   * @return json string
-   * @throws IOException if file not found
-   */
-  private String readJsonFromFile(String filePath) throws IOException {
-    return new String(Files.readAllBytes(Paths.get(filePath)));
-  }
-
-  /**
    * Builds book object from json node and list node Generates random price and rating, 5-15 and 1-5
    * respectively
    *
@@ -109,13 +90,14 @@ public class BookwormService {
   }
 
   /**
-   * Builds URI for external API call with query params
+   * Builds URI for external API call with query params.<br>
+   * Built with the idea that this could be used for multiple API endpoints. <b>Hardcoded URL for
+   * now to prevent code smells</b>
    *
-   * @param url URL of external API
    * @return Built URI in String format
    */
-  private String buildUri(String url) {
-    return UriComponentsBuilder.fromUriString(url)
+  private String buildUri() {
+    return UriComponentsBuilder.fromUriString(Constants.GET_FULL_OVERVIEW)
         .queryParam("api-key", configuration.getApiKey())
         .toUriString();
   }
