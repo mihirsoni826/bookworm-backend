@@ -1,4 +1,4 @@
-![Banner](readme_images/Bookworm%20banner.png)
+<img alt="Banner" src="readme_images/Bookworm banner.png" width="100%"/>
 
 This Spring service serves as the Backend API for
 the [Bookworm React App](https://github.com/mihirsoni826/bookworm-frontend).
