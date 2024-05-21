@@ -20,6 +20,8 @@ Clone the project
 To run this project, you will need to add the following environment variables to your run configurations.
 
 `BOOKWORM_API_KEY` - API key for the [New York Times API](https://developer.nytimes.com/)<br>
+`DB_USERNAME=sa`<br>
+`DB_PASSWORD=password`<br>
 `bookworm.dev-url=http://localhost:8080`<br>
 `bookworm.prod-url=https://bookworm-backend-b18696582ebc.herokuapp.com`
 
