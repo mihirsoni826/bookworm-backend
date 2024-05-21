@@ -3,7 +3,9 @@
 This Spring service serves as the Backend API for
 the [Bookworm React App](https://github.com/mihirsoni826/bookworm-frontend).
 
-<hr>
+## Try it out
+
+[Swagger](https://bookworm-backend-b18696582ebc.herokuapp.com/swagger-ui.html)
 
 ## Run Locally
 
@@ -26,7 +28,3 @@ To run this project, you will need to add the following environment variables to
 ```bash
 mvn clean install
 ```
-
-## API Reference
-
-[Swagger](https://bookworm-backend-b18696582ebc.herokuapp.com/swagger-ui.html)
