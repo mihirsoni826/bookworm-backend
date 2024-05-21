@@ -38,6 +38,6 @@ public class OpenApiConfig {
             .contact(contact)
             .description("This API acts as a backend for the Bookworm React App.");
 
-    return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+    return new OpenAPI().info(info).servers(List.of(prodServer, devServer));
   }
 }
