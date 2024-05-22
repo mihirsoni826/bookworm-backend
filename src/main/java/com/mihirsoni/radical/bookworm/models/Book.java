@@ -24,6 +24,7 @@ public class Book {
   private int price;
   private String listName;
   private String encodedListName;
+  private boolean isRatingPriceChanged;
 
   /**
    * checks if two objects are equal based on their ISBN

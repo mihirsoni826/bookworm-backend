@@ -6,7 +6,6 @@ import com.mihirsoni.radical.bookworm.config.BookwormConfiguration;
 import com.mihirsoni.radical.bookworm.models.Book;
 import com.mihirsoni.radical.bookworm.repository.BookwormRepository;
 import com.mihirsoni.radical.bookworm.utils.Constants;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +56,7 @@ public class BookwormService {
           }
         }
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.error("Error while fetching data from New York Times API", e);
     }
     return books;
@@ -78,6 +77,7 @@ public class BookwormService {
         .author(bookNode.path("author").asText())
         .imageUrl(bookNode.path("book_image").asText())
         .isFavourite(false)
+        .isRatingPriceChanged(false)
         .price(
             bookNode.path("price").asText().equals("0.00")
                 ? generateRandomNumber()
@@ -127,7 +127,8 @@ public class BookwormService {
   }
 
   /**
-   * Removes a book from favourite list if it already exists
+   * Removes a book from the database if the book's price and/or rating have never been changed.
+   * Otherwise, unmarks it as favourite.
    *
    * @param book Book object to be removed from favourite list
    */
@@ -136,9 +137,16 @@ public class BookwormService {
         .findById(book.getIsbn())
         .ifPresentOrElse(
             (oldBook) -> {
-              oldBook.setFavourite(false);
-              repository.save(oldBook);
-              log.info("Book with ISBN {} removed from favourite list", book.getIsbn());
+              if (!oldBook.isRatingPriceChanged()) {
+                log.info("Book with ISBN {} removed from favourite list", book.getIsbn());
+                repository.delete(oldBook);
+              } else {
+                log.info(
+                    "Price/Rating of book with ISBN {} has had been changed, unmarked as favourite",
+                    book.getIsbn());
+                oldBook.setFavourite(false);
+                repository.save(oldBook);
+              }
             },
             () ->
                 log.info(
@@ -158,9 +166,13 @@ public class BookwormService {
             (oldBook) -> {
               oldBook.setRating(book.getRating());
               oldBook.setPrice(book.getPrice());
+              oldBook.setRatingPriceChanged(true);
               repository.save(oldBook);
             },
-            () -> repository.save(book));
+            () -> {
+              book.setRatingPriceChanged(true); // ensure flag is set
+              repository.save(book);
+            });
     log.info(
         "Book with ISBN {} updated with rating {} and price {}",
         book.getIsbn(),
