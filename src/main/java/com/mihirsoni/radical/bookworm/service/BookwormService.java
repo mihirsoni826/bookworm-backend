@@ -6,6 +6,7 @@ import com.mihirsoni.radical.bookworm.config.BookwormConfiguration;
 import com.mihirsoni.radical.bookworm.models.Book;
 import com.mihirsoni.radical.bookworm.repository.BookwormRepository;
 import com.mihirsoni.radical.bookworm.utils.Constants;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,17 @@ public class BookwormService {
    */
   public Set<Book> fetchAllBestsellersAcrossCategoriesFromNYTAPI() {
     String uri = buildUri();
-    String jsonResponse = restTemplate.getForObject(uri, String.class);
 
+    String jsonResponse = null;
+    try {
+      log.info("Calling New York Times API");
+      jsonResponse = restTemplate.getForObject(uri, String.class);
+      log.info("Call to New York Times API was successful");
+    } catch (Exception e) {
+      log.error("Error while fetching data from New York Times API", e);
+    }
+
+    assert jsonResponse != null;
     Set<Book> books = new HashSet<>();
     try {
       JsonNode rootNode = objectMapper.readTree(jsonResponse);
@@ -56,9 +66,10 @@ public class BookwormService {
           }
         }
       }
-    } catch (Exception e) {
-      log.error("Error while fetching data from New York Times API", e);
+    } catch (IOException e) {
+      log.error("Error while building Book object from New York Times API response", e);
     }
+    log.info("Fetched {} unique bestsellers from New York Times API and DB", books.size());
     return books;
   }
 
