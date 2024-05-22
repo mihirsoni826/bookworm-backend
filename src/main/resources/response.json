@@ -1,0 +1,79 @@
+{
+  "status": "OK",
+  "copyright": "Copyright (c) 2024 The New York Times Company.  All Rights Reserved.",
+  "num_results": 230,
+  "results": {
+    "bestsellers_date": "2024-05-11",
+    "published_date": "2024-05-26",
+    "published_date_description": "latest",
+    "previous_published_date": "2024-05-19",
+    "next_published_date": "",
+    "lists": [
+      {
+        "list_id": 704,
+        "list_name": "Combined Print and E-Book Fiction",
+        "list_name_encoded": "combined-print-and-e-book-fiction",
+        "display_name": "Combined Print & E-Book Fiction",
+        "updated": "WEEKLY",
+        "list_image": null,
+        "list_image_width": null,
+        "list_image_height": null,
+        "books": [
+          {
+            "age_group": "",
+            "amazon_product_url": "https:\/\/www.amazon.com\/dp\/1538704439?tag=thenewyorktim-20",
+            "article_chapter_link": "",
+            "author": "Please try again in a few seconds",
+            "book_image": "https:\/\/bloggingx.com\/wp-content\/uploads\/2023\/09\/image1-3.png",
+            "book_image_width": 333,
+            "book_image_height": 500,
+            "book_review_link": "",
+            "book_uri": "nyt:\/\/book\/552fcc09-0ce5-5f51-a285-03421ce01b5d",
+            "btrn": "229230244",
+            "contributor": "by Abby Jimenez",
+            "contributor_note": "",
+            "created_date": "2024-05-15 22:20:34",
+            "description": "Justin and Emma, whose exes find soulmates after breaking up with them, have a fling on a private island on Lake Minnetonka.",
+            "first_chapter_link": "",
+            "price": "0.00",
+            "primary_isbn10": "1538704439",
+            "primary_isbn13": "9781538704412",
+            "publisher": "Forever",
+            "rank": 15,
+            "rank_last_week": 10,
+            "sunday_review_link": "",
+            "title": "API rate limit reached",
+            "updated_date": "2024-05-15 22:25:27",
+            "weeks_on_list": 6,
+            "buy_links": [
+              {
+                "name": "Amazon",
+                "url": "https:\/\/www.amazon.com\/dp\/1538704439?tag=thenewyorktim-20"
+              },
+              {
+                "name": "Apple Books",
+                "url": "https:\/\/goto.applebooks.apple\/9781538704431?at=10lIEQ"
+              },
+              {
+                "name": "Barnes and Noble",
+                "url": "https:\/\/www.anrdoezrs.net\/click-7990613-11819508?url=https%3A%2F%2Fwww.barnesandnoble.com%2Fw%2F%3Fean%3D9781538704431"
+              },
+              {
+                "name": "Books-A-Million",
+                "url": "https:\/\/www.anrdoezrs.net\/click-7990613-35140?url=https%3A%2F%2Fwww.booksamillion.com%2Fp%2FJUST%2BFOR%2BTHE%2BSUMMER%2FAb%2BJimenez%2F9781538704431"
+              },
+              {
+                "name": "Bookshop",
+                "url": "https:\/\/bookshop.org\/a\/3546\/9781538704431"
+              },
+              {
+                "name": "IndieBound",
+                "url": "https:\/\/www.indiebound.org\/book\/9781538704431?aff=NYT"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
