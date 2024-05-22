@@ -7,6 +7,8 @@ import com.mihirsoni.radical.bookworm.models.Book;
 import com.mihirsoni.radical.bookworm.repository.BookwormRepository;
 import com.mihirsoni.radical.bookworm.utils.Constants;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +42,18 @@ public class BookwormService {
       jsonResponse = restTemplate.getForObject(uri, String.class);
       log.info("Call to New York Times API was successful");
     } catch (Exception e) {
-      log.error("Error while fetching data from New York Times API", e);
+      /* In case the user hits the rate limit,
+       * return a hardcoded response which has a dummy book with the
+       * error msg as title, author and book cover to let the user know to try again in a few seconds
+       * */
+      try {
+        jsonResponse =
+            new String(Files.readAllBytes(Paths.get("src/main/resources/response.json")));
+      } catch (IOException e1) {
+        log.error(
+            "Error while fetching data from New York Times API, returning hardcoded response", e1);
+      }
+      log.error("Error while parsing hardcoded response", e);
     }
 
     assert jsonResponse != null;
